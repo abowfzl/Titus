@@ -44,7 +44,7 @@ namespace Service.ImportExport
             return properties;
         }
 
-        public void ImportProductsFromXlsx(Stream stream)
+        public List<string> ImportProductsToRedisFromXlsx(Stream stream)
         {
             using var xlPackage = new ExcelPackage(stream);
 
@@ -84,22 +84,28 @@ namespace Service.ImportExport
                             break;
                     }
 
-                    products.Add(product);
+                    if (products.All(p => p.Name != product.Name))
+                        products.Add(product);
                 }
 
                 iRow++;
             }
 
-            if (!products.Any()) return;
+            var setRedisKeys = new List<string>();
+
+            if (!products.Any()) return setRedisKeys;
             {
                 foreach (var product in products)
                 {
-                    var isExist = _distributedCachManager.IsKeyExist($"product-{product.Name}");
+                    var redisKey = $"product-{product.Name}";
 
-                    if (isExist == false)
-                        _distributedCachManager.SetKey($"product-{product.Name}", product, 30);
+                    _distributedCachManager.SetKey(redisKey, product, 30);
+
+                    setRedisKeys.Add(redisKey);
                 }
             }
+
+            return setRedisKeys;
         }
     }
 }

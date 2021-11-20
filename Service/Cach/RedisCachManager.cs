@@ -43,7 +43,7 @@ namespace Service.Cach
 
             var serializedItem = JsonConvert.SerializeObject(data);
 
-            _db.StringSet(key, serializedItem, expiresIn);
+            _db.StringSet(key, serializedItem, expiresIn, When.NotExists);
         }
 
         public bool IsKeyExist(string key)

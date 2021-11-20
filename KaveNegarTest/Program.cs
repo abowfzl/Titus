@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Core;
 using Core.Domain;
 using Core.ImportExport;
@@ -32,29 +33,31 @@ namespace KaveNegarTest
 
             var importManagerService = serviceProdvider.GetService<IImportManager>();
 
-            importManagerService?.ImportProductsFromXlsx(stream);
+            var setRedisKeys = importManagerService?.ImportProductsToRedisFromXlsx(stream);
+
+            if (setRedisKeys == null || !setRedisKeys.Any())
+            {
+                Console.WriteLine("No Data Inserted To Redis");
+                Console.ReadLine();
+            }
 
             Console.WriteLine("Excel Imported to Redis");
 
             var distributedCachManager = serviceProdvider.GetService<IDistributedCachManager>();
-
-            var redisKeys = distributedCachManager.GetAllKeys();
-
-            Console.WriteLine("All Redis Keys Loaded");
-
+            
             var products = new List<Product>();
-            foreach (var redisKey in redisKeys)
+            foreach (var redisKey in setRedisKeys)
             {
-                var product = distributedCachManager.GetKey<Product>(redisKey);
+                var product = distributedCachManager?.GetKey<Product>(redisKey);
                 products.Add(product);
             }
 
-            Console.WriteLine("All products Loaded");
+            Console.WriteLine("All products Loaded From Redis");
 
             var productService = serviceProdvider.GetService<IProductService>();
-            productService.InsertProducts(products);
+            productService?.InsertProducts(products);
 
-            Console.WriteLine("All Products Inserted");
+            Console.WriteLine("All Products Inserted To DataBase");
 
             Console.WriteLine("Work Done");
 
@@ -84,7 +87,7 @@ namespace KaveNegarTest
                 .AddDbContext<BaseDbContext>(options =>
                     options.UseSqlServer(config.GetConnectionString("ConnectionStrings")))
                 .BuildServiceProvider();
-            
+
             return serviceProvider;
         }
     }
