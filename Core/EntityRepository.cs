@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 using System.Transactions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,7 +32,7 @@ namespace Core
             _dbSet.BulkInsert(baseEntities);
 
             _context.SaveChanges();
-            
+
             transaction.Complete();
         }
 
@@ -43,6 +44,11 @@ namespace Core
         public void Delete(TEntity entity)
         {
             _dbSet.Remove(entity);
+        }
+        
+        public TEntity GetById<TPrimaryKey>(TPrimaryKey primaryKey)
+        {
+            return _dbSet.Find(primaryKey);
         }
     }
 }

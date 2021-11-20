@@ -10,5 +10,7 @@ namespace Core
         void Update(TEntity entity);
 
         void Delete(TEntity entity);
+
+        TEntity GetById<TPrimaryKey>(TPrimaryKey primaryKey);
     }
 }
