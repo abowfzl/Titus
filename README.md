@@ -21,7 +21,7 @@ An Cosole Application built with .Net 5 with 2 ClassLibrary (3 Layer (Core, Doma
 Repository Pattern For EF DbContext and Redis Wrapper in [Core](https://github.com/abowfzl/Titus/blob/master/Core) Layer,</br>
 Models In [Domain](https://github.com/abowfzl/Titus/blob/master/Core/Domain/),</br>
 Services and Distributed CacheManager Methods Implemention In [Service](https://github.com/abowfzl/Titus/blob/master/Service) Layer,</br>
-Unit Tests with Moq Repository and Fake Services for Test Domain Services In [UnitTest](https://github.com/abowfzl/Titus/blob/master/UnitTest)
+Unit Tests with Moq Repository and Fake Services for Test Domain Services In [UnitTest](https://github.com/abowfzl/Titus/blob/master/Test)
 
 
 ### Built With
