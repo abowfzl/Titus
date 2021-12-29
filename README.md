@@ -16,6 +16,12 @@ Read again from Redis and Insert to SQL With Fastest Performance.
 3.Read Data From Redis.</br>
 4.Insert Data In SQL.</br>
 
+# About
+An Cosole Application with 3 ClassLibrary (3 Layer)</br>
+Core,Data,Servie </br>
+Repository Pattern For EF DbContext and Redis Wrapper in Core Layer</br>
+Models In Data</br>
+Services In Service Layer</br>
 
 
 ### Built With
